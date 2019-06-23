@@ -2,7 +2,7 @@
 
 `octane-websockets-client-nodejs` is intended to simplify connection to ALM Octane's WebSocket endpoints.
 
-##### Usage
+#### Usage
 
 First, __bundle__ the library's relevant version to your package with package manager's standard ways.
 (TODO: we should publish the library to NPM or something like this)
@@ -21,7 +21,7 @@ The client will:
 - perform the connection
 - bind your custom provided `onMessage` method to the WS so that on any incoming message it'll be called
 
-##### API
+#### API
 `connect`
   - async
   - receives __configuration object__
