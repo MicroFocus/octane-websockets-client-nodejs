@@ -1,0 +1,26 @@
+{
+  "name": "octane-websockets-client-nodejs",
+  "version": "0.0.1",
+  "description": "WebSocket client for ALM Octane integration",
+  "dependencies": {
+    "ws": "^7.0.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MicroFocus/octane-websockets-client-nodejs"
+  },
+  "keywords": [
+    "websocket",
+    "client",
+    "alm",
+    "octane",
+    "integration"
+  ],
+  "author": "MicroFocus",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/MicroFocus/octane-websockets-client-nodejs/issues"
+  },
+  "homepage": "https://github.com/MicroFocus/leanft-selenium-js-sdk#readme"
+}
