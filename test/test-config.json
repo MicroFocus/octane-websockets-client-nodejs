@@ -1,0 +1,11 @@
+{
+  "isSSL": false,
+  "octaneHost": "myd-vma00299.swinfra.net",
+  "octanePort": 30001,
+  "sharedSpace": 1001,
+  "endpoint": "webhooks",
+  "client": "ws_j92p133nw94pxc03n9n9915xv",
+  "secret": "+13666a0aed89934X",
+  "proxyHost": "web-proxy.il.softwaregrp.net",
+  "proxyPort": "8080"
+}

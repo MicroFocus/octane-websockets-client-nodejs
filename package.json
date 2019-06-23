@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "WebSocket client for ALM Octane integration",
   "dependencies": {
-    "ws": "^7.0.1"
+    "ws": "^7.0.1",
+    "https-proxy-agent": "^2.2.1"
   },
   "devDependencies": {},
   "repository": {
