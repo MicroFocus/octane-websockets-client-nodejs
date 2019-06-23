@@ -14,7 +14,11 @@ const octaneWSClient = require('octane-ws-client');
 ```
 
 This imported client can connect to multiple endpoints.
-User `connect` method to provide the configuration of the targeted WS endpoint and the callback to be called upon messages and you are good to go.
+
+Use `connect` method to provide the configuration of the targeted WS endpoint.
+
+This method may be called any number of times and will connect that number of WS clients, so call it wisely.
+
 The client will:
 - verify the configuration
 - perform the login
