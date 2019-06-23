@@ -1,6 +1,6 @@
 ## Summary
 
-`octane-websockets-client-nodejs` is intended to simplify connection to ALM Octane's web socket's endpoints.
+`octane-websockets-client-nodejs` is intended to simplify connection to ALM Octane's WebSocket endpoints.
 
 ##### Usage
 
