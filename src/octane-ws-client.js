@@ -8,7 +8,7 @@ exports.connect = connect;
 
 async function connect(config) {
 	validateConfig(config);
-	console.info('configuration to be used:');
+	console.info('configuration to Octane WebSocket endpoint:');
 	console.dir({
 		isSSL: config.isSSL,
 		octaneHost: config.octaneHost,
@@ -20,44 +20,60 @@ async function connect(config) {
 		proxyPort: config.proxyPort
 	});
 
-	let authToken;
-	try {
-		authToken = await doLogin(config);
-		console.info('successfully logged into Octane');
-	} catch (error) {
-		console.error(error);
-		return;
-	}
-
-	const proxyAgent = createProxyAgentIfAny(config);
-	const targetUrl = (config.isSSL ? 'wss' : 'ws') + '://' +
-		config.octaneHost + ':' + config.octanePort +
-		'/messaging/shared_spaces/' + config.sharedSpace + '/' + config.endpoint;
-	const options = {
-		headers: {
-			'ALM_OCTANE_TECH_PREVIEW': 'true',
-			'Cookie': authToken
+	return new Promise(async (resolve, reject) => {
+		let authToken;
+		try {
+			authToken = await doLogin(config);
+		} catch (error) {
+			reject(error);
+			return;
 		}
-	};
 
-	if (proxyAgent) {
-		options.agent = proxyAgent;
-	}
+		const proxyAgent = createProxyAgentIfAny(config);
+		const targetUrl = (config.isSSL ? 'wss' : 'ws') + '://' +
+			config.octaneHost + ':' + config.octanePort +
+			'/messaging/shared_spaces/' + config.sharedSpace + '/' + config.endpoint;
+		const options = {
+			headers: {
+				'ALM_OCTANE_TECH_PREVIEW': 'true',
+				'Cookie': authToken
+			}
+		};
 
-	const wsClient = new WS(targetUrl, options);
+		if (proxyAgent) {
+			options.agent = proxyAgent;
+		}
 
-	wsClient.on('open', () => {
-		console.info('successfully established WS connection to Octane endpoint "' + config.endpoint + '"');
-	});
-	wsClient.on('error', error => {
-		console.error('failed to establish WS connection to Octane endpoint "' + config.endpoint + '"', error);
-	});
-	wsClient.on('message', config.onMessage);
+		const
+			wsClient = new WS(targetUrl, options),
+			result = {
+				onError: null,
+				onMessage: config.onMessage
+			};
 
-	const pingInterval = setInterval(() => {
-		wsClient.ping(() => {
+		wsClient.on('open', () => {
+			console.info('successfully established WS connection to Octane endpoint "' + config.endpoint + '"');
+			resolve(result);
 		});
-	}, 7000);
+		wsClient.on('error', error => {
+			if (typeof result.onError === 'function') {
+				result.onError(error);
+			} else {
+				console.error('failed to establish WS connection to Octane endpoint "' + config.endpoint + '"', error);
+			}
+		});
+		wsClient.on('message', data => {
+			if (typeof result.onMessage === 'function') {
+				result.onMessage(data);
+			}
+		});
+
+		const pingInterval = setInterval(() => {
+			wsClient.ping(() => {
+			});
+		}, 7000);
+	});
+
 }
 
 function validateConfig(config) {
@@ -73,14 +89,14 @@ function validateConfig(config) {
 	if (!config.sharedSpace || isNaN(config.sharedSpace)) {
 		throw new Error('"sharedSpace" parameter is missing or not a number');
 	}
+	if (!config.endpoint || typeof config.endpoint !== 'string') {
+		throw new Error('"endpoint" parameter is missing, empty or not a string');
+	}
 	if (!config.client || typeof config.client !== 'string') {
 		throw new Error('"client" parameter is missing, empty or not a string');
 	}
 	if (!config.secret || typeof config.secret !== 'string') {
 		throw new Error('"secret" parameter is missing, empty or not a string');
-	}
-	if (typeof config.onMessage !== 'function') {
-		throw new Error('"onMessage" parameter MUST be a valid function');
 	}
 }
 
