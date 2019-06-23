@@ -19,17 +19,17 @@ Use `connect` method to provide the configuration of the targeted WS endpoint.
 
 This method may be called any number of times and will connect that number of WS clients, so call it wisely.
 
-The client will:
+While performing connection, the library will:
 - verify the configuration
 - perform the login
 - perform the connection
-- bind your custom provided `onMessage` method to the WS so that on any incoming message it'll be called
+- bind your custom provided (if provided) `onMessage` method to the WS so that on any incoming message it'll be called
 
 #### API
 `connect`
   - async
   - receives __configuration object__
-  - return __Octane WebSocket client__
+  - returns __Octane WebSocket client__
   
 `configuration object` shaped as following:
 ```
